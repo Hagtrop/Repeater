@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <string name="dynamicText">dynamic text</string>
+    <string name="app_name">Repeater</string>
+    <string name="newTestBtn">Новый тест</string>
+    <string name="continueTestBtn">Продолжить тест</string>
+    <string name="questionsBtn">Вопросы</string>
+    <string name="createGroupBtn">Создать группу</string>
+    <string name="noGroupsFoundTV">В базе данных нет ни одной группы.\nПрежде чем добавлять вопросы создайте новую группу.</string>
+    <string name="enterGroupNameTV">Введите название группы</string>
+    <string name="saveGroupNameBtn">Сохранить</string>
+    <string name="menu_delete">удалить</string>
+    <string name="menu_edit">редактировать</string>
+    <string name="noQuestionsFoundTV">Группа пуста</string>
+    <string name="createQuestionBtn">Добавить вопрос</string>
+    <string name="saveQuestionBtn">Сохранить</string>
+    <string name="questionTitleTV">Заголовок</string>
+    <string name="questionTextTV">Вопрос</string>
+    <string name="answerTextTV">Ответ</string>
+    <string name="a6_questionTV">Вопрос:</string>
+    <string name="a6_answerTV">Ответ:</string>
+    <string name="a7_saveBtn">Сохранить</string>
+    <string name="a8_nextBtn">Далее</string>
+    <string name="a8_countTV_plus">+</string>
+    <string name="a9_notestsTV">Вы не создали ни одного теста</string>
+    <string name="a9_continueTestMenuItem">Продолжить</string>
+    <string name="a9_startoverTestMenuItem">Начать сначала</string>
+    <string name="a9_restartTestMenuItem">Начать сначала</string>
+    <string name="a9_deleteTestMenuItem">удалить</string>
+    <string name="a10_yesBtn">Помню</string>
+    <string name="a10_noBtn">Не помню</string>
+    <string name="a10_checkAnswerChBx">Проверить ответ:</string>
+    <string name="a11_chooseModeTV">Порядок следования вопросов</string>
+    <string name="a11_modeSimpleRBtn">Случайный выбор из постоянного списка</string>
+    <string name="a11_modeProgressiveRBtn">С исключением правильно отвеченных вопросов</string>
+    <string name="a11_chooseDurationTV">Продолжительность теста</string>
+    <string name="a11_durationEndlessRBtn">Пока не надоест</string>
+    <string name="a11_iterationRBtn">Число проходов</string>
+    <string name="a11_startBtn">Старт</string>
+    <string name="a11_iterationET">1</string>
+
+</resources>

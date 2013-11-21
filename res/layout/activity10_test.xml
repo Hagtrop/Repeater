@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/a10_stepTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:text="@string/dynamicText"
+        android:textStyle="italic" />
+
+    <TextView
+        android:id="@+id/a10_questionTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/dynamicText" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp" >
+
+        <Button
+            android:id="@+id/a10_yesBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:text="@string/a10_yesBtn" />
+
+        <Button
+            android:id="@+id/a10_noBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:text="@string/a10_noBtn" />
+
+    </RelativeLayout>
+
+    <CheckBox
+        android:id="@+id/a10_checkAnswerChBx"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/a10_checkAnswerChBx" />
+
+    <EditText
+        android:id="@+id/a10_answerET"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textMultiLine" >
+
+        <requestFocus />
+    </EditText>
+
+</LinearLayout>

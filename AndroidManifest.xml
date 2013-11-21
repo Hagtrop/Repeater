@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.hagtrop.repeater"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="11"
+        android:targetSdkVersion="17" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" android:debuggable="true">
+        <activity
+            android:name="com.hagtrop.repeater.MainActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name="GroupsActivity"></activity>
+        <activity android:name="AddGroupsActivity"></activity>
+        <provider android:authorities="com.hagtrop.repeater.DataBase" android:name="DataBaseContentProvider" android:exported="false"></provider>
+        <activity android:name="GroupQuestionsActivity"></activity>
+        <activity android:name="AddQuestionsActivity"></activity>
+        <activity android:name="QuestionActivity"></activity>
+        <activity android:name="TextEditorActivity"></activity>
+        <activity android:name="NewTestActivity"></activity>
+        <activity android:name="SelectTestActivity"></activity>
+        <activity android:name="TestActivity"></activity>
+        <activity android:name="ModeActivity"></activity>
+    </application>
+
+</manifest>
