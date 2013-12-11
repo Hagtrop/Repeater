@@ -39,5 +39,9 @@
     <string name="a11_iterationRBtn">Число проходов</string>
     <string name="a11_startBtn">Старт</string>
     <string name="a11_iterationET">1</string>
+    <string name="a12_yourAnswerHeaderTV">Ваш ответ:</string>
+    <string name="a12_rightAnswerHeaderTV">Правильный ответ:</string>
+    <string name="a12_answerCorrectBtn">Различия несущесвенны</string>
+    <string name="a12_answerIncorrectBtn">Мой ответ неверен</string>
 
 </resources>

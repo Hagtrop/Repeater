@@ -33,6 +33,7 @@
         <activity android:name="SelectTestActivity"></activity>
         <activity android:name="TestActivity"></activity>
         <activity android:name="ModeActivity"></activity>
+        <activity android:name="CompareAnswersActivity"></activity>
     </application>
 
 </manifest>

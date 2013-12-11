@@ -10,6 +10,7 @@ import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -17,11 +18,15 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class TestActivity extends Activity implements OnClickListener{
 	TextView stepTV, questionTV;
+	EditText answerET;
+	CheckBox checkAnswerChBx;
 	private long testId;
 	Button yesBtn, noBtn;
 	Test test;
@@ -39,6 +44,8 @@ public class TestActivity extends Activity implements OnClickListener{
 		yesBtn.setOnClickListener(this);
 		noBtn = (Button) findViewById(R.id.a10_noBtn);
 		noBtn.setOnClickListener(this);
+		answerET = (EditText) findViewById(R.id.a10_answerET);
+		checkAnswerChBx = (CheckBox) findViewById(R.id.a10_checkAnswerChBx);
 		test = new Test(testId, getContentResolver());
 		if(test.moveToNext()){
 			displayQuestion();
@@ -59,10 +66,36 @@ public class TestActivity extends Activity implements OnClickListener{
 		// TODO Auto-generated method stub
 		switch(v.getId()){
 		case R.id.a10_yesBtn:
-			test.applyAnswer(true);
+			if(checkAnswerChBx.isChecked()){
+				Intent iCompareAnswers = new Intent(this, CompareAnswersActivity.class);
+				iCompareAnswers.putExtra("correct answer", test.getAnswer());
+				iCompareAnswers.putExtra("your answer", answerET.getText().toString());
+				startActivityForResult(iCompareAnswers, 1);
+			}
+			else{
+				test.applyAnswer(true);
+			}
 			break;
 		case R.id.a10_noBtn:
 			test.applyAnswer(false);
+			break;
+		default: break;
+		}	
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// TODO Auto-generated method stub
+		switch(requestCode){
+		case 1:
+			if(resultCode == RESULT_OK && data.getExtras().getBoolean("correct")){
+				test.applyAnswer(true);
+			}
+			else{
+				test.applyAnswer(false);
+			}
+			break;
+		case 2:
 			break;
 		default: break;
 		}
@@ -180,6 +213,10 @@ class Test{
 	
 	String getQuestion(){
 		return question;
+	}
+	
+	String getAnswer(){
+		return answer;
 	}
 	
 	void setCompleted(boolean compl){
