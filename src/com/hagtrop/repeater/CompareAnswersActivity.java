@@ -32,13 +32,21 @@ public class CompareAnswersActivity extends Activity implements OnClickListener{
 		correctAnswer = iFromTest.getStringExtra("correct answer");
 		yourAnswerTV.setText(yourAnswer);
 		correctAnswerTV.setText(correctAnswer);
+		
 		if(yourAnswer.equals(correctAnswer)){
 			resultTV.setText("Вы ответили правильно!");
-			resultTV.setTextColor(Color.GREEN);
+			resultTV.setTextColor(Color.parseColor("#00bb23"));
+			correctBtn.setVisibility(View.GONE);
+			incorrectBtn.setVisibility(View.GONE);
+			Intent iBackToTest = new Intent();
+			iBackToTest.putExtra("correct", true);
+			setResult(RESULT_OK, iBackToTest);
 		}
 		else{
 			resultTV.setText("Вы ответили неправильно!");
 			resultTV.setTextColor(Color.RED);
+			correctBtn.setVisibility(View.VISIBLE);
+			incorrectBtn.setVisibility(View.VISIBLE);
 		}
 	}
 

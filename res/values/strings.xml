@@ -43,5 +43,6 @@
     <string name="a12_rightAnswerHeaderTV">Правильный ответ:</string>
     <string name="a12_answerCorrectBtn">Различия несущесвенны</string>
     <string name="a12_answerIncorrectBtn">Мой ответ неверен</string>
+    <string name="a13_headerTV">Ответ:</string>
 
 </resources>

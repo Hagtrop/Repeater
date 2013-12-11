@@ -47,11 +47,7 @@ public class TestActivity extends Activity implements OnClickListener{
 		answerET = (EditText) findViewById(R.id.a10_answerET);
 		checkAnswerChBx = (CheckBox) findViewById(R.id.a10_checkAnswerChBx);
 		test = new Test(testId, getContentResolver());
-		if(test.moveToNext()){
-			displayQuestion();
-			test.printTestData();
-		}
-		else endTest();
+		tryMoveToNext();
 	}
 	
 	@Override
@@ -74,10 +70,13 @@ public class TestActivity extends Activity implements OnClickListener{
 			}
 			else{
 				test.applyAnswer(true);
+				tryMoveToNext();
 			}
 			break;
 		case R.id.a10_noBtn:
-			test.applyAnswer(false);
+			Intent iDisplayAnswer = new Intent(this, DisplayAnswerActivity.class);
+			iDisplayAnswer.putExtra("answer", test.getAnswer());
+			startActivityForResult(iDisplayAnswer, 2);
 			break;
 		default: break;
 		}	
@@ -96,14 +95,11 @@ public class TestActivity extends Activity implements OnClickListener{
 			}
 			break;
 		case 2:
+			test.applyAnswer(false);
 			break;
 		default: break;
 		}
-		if(test.moveToNext()){
-			displayQuestion();
-			test.printTestData();
-		}
-		else endTest();
+		tryMoveToNext();
 	}
 	
 	private void endTest(){
@@ -115,6 +111,16 @@ public class TestActivity extends Activity implements OnClickListener{
 	private void displayQuestion(){
 		stepTV.setText("Round: " + test.getRound() + " Step: " + test.getStep());
 		questionTV.setText(test.getQuestion());
+	}
+	
+	private void tryMoveToNext(){
+		if(test.moveToNext()){
+			displayQuestion();
+			test.printTestData();
+			answerET.getText().clear();
+			checkAnswerChBx.setChecked(false);
+		}
+		else endTest();
 	}
 }
 
