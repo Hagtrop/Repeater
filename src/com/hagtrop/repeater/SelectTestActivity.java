@@ -101,6 +101,8 @@ public class SelectTestActivity extends Activity implements OnItemClickListener,
 			Test.resetTest(selectedTestId, getContentResolver());
 			break;
 		}
+		getContentResolver().delete(DataBaseContentProvider.TEST_REFRESH_URI, "_id=?", new String[]{String.valueOf(selectedTestId)});
+		
 		Intent iTestActivity = new Intent(this, TestActivity.class);
 		iTestActivity.putExtra("testId", selectedTestId);
 		startActivityForResult(iTestActivity,1);

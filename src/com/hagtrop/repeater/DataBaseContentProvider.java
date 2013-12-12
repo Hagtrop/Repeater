@@ -43,6 +43,10 @@ public class DataBaseContentProvider extends ContentProvider {
 	static final Uri LOG_URI = Uri.parse("content://com.hagtrop.repeater.DataBase/log");
 	static final int LOG_CODE = 9;
 	
+	static final String TEST_REFRESH_PATH = "tests/test/refresh";
+	static final Uri TEST_REFRESH_URI = Uri.parse("content://com.hagtrop.repeater.DataBase/tests/test/refresh");
+	static final int TEST_REFRESH_CODE = 10;
+	
 	static final UriMatcher uriMatcher;
 	static {
 		uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
@@ -53,6 +57,7 @@ public class DataBaseContentProvider extends ContentProvider {
 		uriMatcher.addURI(AUTHORITY, ONE_TEST_PATH, ONE_TEST_CODE);
 		uriMatcher.addURI(AUTHORITY, NOT_EMPTY_GROUPS_PATH, NOT_EMPTY_GROUPS_CODE);
 		uriMatcher.addURI(AUTHORITY, LOG_PATH, LOG_CODE);
+		uriMatcher.addURI(AUTHORITY, TEST_REFRESH_PATH, TEST_REFRESH_CODE);
 	}
 	@Override
 	public boolean onCreate() {
@@ -67,7 +72,7 @@ public class DataBaseContentProvider extends ContentProvider {
 		database = baseHelper.getWritableDatabase();
 		int count = 0;
 		String table;
-		
+		Cursor cursor;
 		switch(uriMatcher.match(uri)){
 		case GROUPS_CODE:
 			table = GROUPS_PATH;
@@ -77,15 +82,21 @@ public class DataBaseContentProvider extends ContentProvider {
 			break;
 		case TESTS_CODE:
 			table = TESTS_PATH;
-			Cursor cursor = query(TESTS_URI, new String[]{"table_title"}, "_id="+selectionArgs[0], null, null);
+			cursor = query(TESTS_URI, new String[]{"table_title"}, "_id="+selectionArgs[0], null, null);
 			cursor.moveToFirst();
 			String testTableName = cursor.getString(0);
 			database.execSQL("DROP TABLE " + testTableName);
+			break;
+		case TEST_REFRESH_CODE:
+			table = getTestTableName(selectionArgs[0]);
+			selection = table + "._id NOT IN (SELECT questions._id FROM questions)";
+			selectionArgs = null;
 			break;
 		default: throw new IllegalArgumentException("Wrong URI: " + uri);
 		}
 		
 		count = database.delete(table, selection, selectionArgs);
+		Log.d("mLog", "Удалено записей: " + count);
 		getContext().getContentResolver().notifyChange(uri, null);
 
 		return count;
