@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.ContentValues;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -17,7 +18,6 @@ public class AddQuestionsActivity extends Activity implements OnClickListener{
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity5_add_questions);
 		
@@ -31,34 +31,38 @@ public class AddQuestionsActivity extends Activity implements OnClickListener{
 
 	@Override
 	public void onClick(View v) {
-		// TODO Auto-generated method stub
 		switch(v.getId()){
 		case R.id.a5_saveBtn:
 			String title, question, answer;
 			title = titleET.getText().toString().trim();
 			question = questionET.getText().toString().trim();
 			answer = answerET.getText().toString().trim();
+			Toast toast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
+			toast.setGravity(Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL, 0, 0);
+			//Проверяем что все поля формы были заполнены, иначе выводим сообщение
 			if(TextUtils.isEmpty(title)){
-				Toast.makeText(this, "Укажите заголовок", Toast.LENGTH_SHORT).show();
+				toast.setText(R.string.a5_headerMissedMsg);
 			}
 			else if(TextUtils.isEmpty(question)){
-				Toast.makeText(this, "Введите вопрос", Toast.LENGTH_SHORT).show();
+				toast.setText(R.string.a5_questionMissedMsg);
 			}
 			else if(TextUtils.isEmpty(answer)){
-				Toast.makeText(this, "Введите ответ", Toast.LENGTH_SHORT).show();
+				toast.setText(R.string.a5_answerMissedMsg);
 			}
 			else{
+				//Добавляем вопрос в базу данных и выводим сообщение
 				ContentValues cv = new ContentValues();
 				cv.put("title", title);
 				cv.put("question", question);
 				cv.put("answer", answer);
 				cv.put("group_id", groupId);
 				getContentResolver().insert(DataBaseContentProvider.QUESTIONS_URI, cv);
-				Toast.makeText(this, "Вопрос сохранён", Toast.LENGTH_SHORT).show();
+				toast.setText(R.string.a5_questionSavedMsg);
 				titleET.getText().clear();
 				questionET.getText().clear();
 				answerET.getText().clear();
 			}
+			toast.show();
 			break;
 		default: break;
 		}

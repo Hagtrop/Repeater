@@ -13,7 +13,7 @@
         android:id="@+id/a3_enterNameTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/enterGroupNameTV" />
+        android:text="@string/a3_enterNameTV" />
 
     <EditText
         android:id="@+id/a3_nameET"
@@ -29,6 +29,6 @@
         android:id="@+id/a3_saveBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/saveGroupNameBtn" />
+        android:text="@string/a3_saveBtn" />
 
 </LinearLayout>

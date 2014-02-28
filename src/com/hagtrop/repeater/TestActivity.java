@@ -33,7 +33,6 @@ public class TestActivity extends Activity implements OnClickListener{
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity10_test);
 		
@@ -47,36 +46,38 @@ public class TestActivity extends Activity implements OnClickListener{
 		answerET = (EditText) findViewById(R.id.a10_answerET);
 		checkAnswerChBx = (CheckBox) findViewById(R.id.a10_checkAnswerChBx);
 		test = new Test(testId, getContentResolver());
+		//ѕытаемс€ загрузить из Ѕƒ и отобразить на экране следующий вопрос, либо выходим из теста
 		tryMoveToNext();
 	}
 	
 	@Override
 	protected void onDestroy() {
-		// TODO Auto-generated method stub
 		test.saveProgress();
 		super.onDestroy();
 	}
 
 	@Override
 	public void onClick(View v) {
-		// TODO Auto-generated method stub
 		switch(v.getId()){
 		case R.id.a10_yesBtn:
 			if(checkAnswerChBx.isChecked()){
-				Intent iCompareAnswers = new Intent(this, CompareAnswersActivity.class);
-				iCompareAnswers.putExtra("correct answer", test.getAnswer());
-				iCompareAnswers.putExtra("your answer", answerET.getText().toString());
-				startActivityForResult(iCompareAnswers, 1);
+				//ѕереходим к сравнению введЄнного ответа с правильным ответом
+				Intent iToCompareAnswers = new Intent(this, CompareAnswersActivity.class);
+				iToCompareAnswers.putExtra("correct answer", test.getAnswer());
+				iToCompareAnswers.putExtra("your answer", answerET.getText().toString());
+				startActivityForResult(iToCompareAnswers, 1);
 			}
 			else{
+				//«асчитываем правильный ответ без проверки
 				test.applyAnswer(true);
 				tryMoveToNext();
 			}
 			break;
 		case R.id.a10_noBtn:
-			Intent iDisplayAnswer = new Intent(this, DisplayAnswerActivity.class);
-			iDisplayAnswer.putExtra("answer", test.getAnswer());
-			startActivityForResult(iDisplayAnswer, 2);
+			//ќтображаем правильный ответ
+			Intent iToDisplayAnswer = new Intent(this, DisplayAnswerActivity.class);
+			iToDisplayAnswer.putExtra("answer", test.getAnswer());
+			startActivityForResult(iToDisplayAnswer, 2);
 			break;
 		default: break;
 		}	
@@ -84,8 +85,8 @@ public class TestActivity extends Activity implements OnClickListener{
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		// TODO Auto-generated method stub
 		switch(requestCode){
+		//¬ернулись из CompareAnswersActivity
 		case 1:
 			if(resultCode == RESULT_OK && data.getExtras().getBoolean("correct")){
 				test.applyAnswer(true);
@@ -94,6 +95,7 @@ public class TestActivity extends Activity implements OnClickListener{
 				test.applyAnswer(false);
 			}
 			break;
+		//¬ернулись из DisplayAnswerActivity
 		case 2:
 			test.applyAnswer(false);
 			break;
@@ -145,6 +147,7 @@ class Test{
 	private int completed;
 	
 	static void resetTest(long id, ContentResolver resolver){
+		//ќбнул€ем прогресс теста
 		ContentValues cv = new ContentValues();
 		cv.put("round", 0);
 		cv.put("step", 0);
@@ -168,6 +171,7 @@ class Test{
 	
 	void applyAnswer(boolean correct){
 		int result = correct? 1 : 0;
+		//≈сли выбран прогрессивный режим и ответ на вопрос верен, то исключаем вопрос из списка показа 
 		if(correct && mode == 1){
 			testQuesId.remove(quNumber);
 		}
@@ -230,14 +234,20 @@ class Test{
 	}
 	
 	boolean moveToNext(){
-		if(round == 0) round++;
+		if(round == 0) round++; //” не начатого теста значение round равно 0
 		if(duration > 0 && round == duration && (testQuesId.isEmpty() || (quNumber == testQuesId.size()-1) && mode == 0)){
-			Log.d("mLog", "duration="+duration+" round="+round+" testQuesId.isEmpty()="+testQuesId.isEmpty()+" testQuesId.size()="+testQuesId.size()+" quNumber="+quNumber);
+			//“ест завершЄн при одновременном выполнении следующих условий:
+			//1) ѕродолжительность ограничена количеством раундов
+			//2) “екущий раунд равен максимальному
+			//3) –абочий список вопросов пуст, или показаны все вопросы в режиме случайного выбора из посто€нного списка
 			return false;
 		}
 		switch(mode){
 		case 0:
-			if(quNumber == testQuesId.size()-1 || step == quesId.length){
+			//≈сли число показов в режиме посто€нного списка вопросов достигло максимального количества вопросов,
+			//то переходим на следующий раунд
+			if(step == quesId.length){
+			//if(quNumber == testQuesId.size()-1 || step == quesId.length){
 				round++;
 				reloadTestArray();
 				ArrayShuffle.reshuffle(testQuesId);
@@ -251,6 +261,8 @@ class Test{
 			}
 			break;
 		case 1:
+			//¬ режиме с исключением вопросов переходим на следующий раунд, когда динамический массив вопросов опустеет,
+			//т.е. на все вопросы дан правильный ответ
 			if(testQuesId.isEmpty()){
 				round++;
 				step = 1;
@@ -290,6 +302,7 @@ class Test{
 	}
 	
 	private void loadDataFromDB(){
+		//ѕолучаем состо€ние теста из таблицы тестов
 		Cursor cursor = resolver.query(DataBaseContentProvider.TESTS_URI, new String[]{"table_title", "mode", "duration", "round", "step", "completed"}, "_id="+testId, null, null);
 		cursor.moveToFirst();
 		tableName = cursor.getString(cursor.getColumnIndex("table_title"));
@@ -299,15 +312,16 @@ class Test{
 		step = prevStep = cursor.getInt(cursor.getColumnIndex("step"));
 		completed = cursor.getInt(cursor.getColumnIndex("completed"));
 		cursor.close();
+		//ѕолучаем список id вопросов теста и их состо€ние
 		Uri uri = ContentUris.withAppendedId(DataBaseContentProvider.TESTS_URI, testId);
 		cursor = resolver.query(uri, new String[]{"_id", "hits", "answered"}, null, null, null);
 		int idIndex = cursor.getColumnIndex("_id");
 		int hitsIndex = cursor.getColumnIndex("hits");
 		int answerIndex = cursor.getColumnIndex("answered");
 		cursor.moveToFirst();
-		testQuesId = new ArrayList<Long>();
-		quesId = new long[cursor.getCount()];
-		quesStatus = new HashMap<Long, Integer[]>();
+		testQuesId = new ArrayList<Long>(); //динамический список id вопросов текущего раунда
+		quesId = new long[cursor.getCount()]; //полный список id вопросов теста
+		quesStatus = new HashMap<Long, Integer[]>(); //количество показов каждого вопроса и результат в текущем раунде
 		int pos = 0;
 		do{
 			long key = cursor.getLong(idIndex);

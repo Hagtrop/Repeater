@@ -33,7 +33,7 @@ class BaseHelper extends SQLiteOpenHelper {
 
 	}
 	
-	public int getQuestionsCount(){
+	/*public int getQuestionsCount(){
 		int count = 0;
 		SQLiteDatabase db = null;
 		Cursor cursor = null;
@@ -50,7 +50,8 @@ class BaseHelper extends SQLiteOpenHelper {
 		closeDB(db);
 		Log.d(LOG_TAG, "getQuestionsCount = " + count);
 		return count;
-	}
+	}*/
+	
 	public int getGroupsCount(){
 		int count = 0;
 		SQLiteDatabase db = null;

@@ -24,7 +24,6 @@ public class ModeActivity extends Activity implements OnClickListener, OnChecked
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity11_mode);
 		
@@ -41,30 +40,31 @@ public class ModeActivity extends Activity implements OnClickListener, OnChecked
 
 	@Override
 	public void onClick(View v) {
-		// TODO Auto-generated method stub
 		switch(v.getId()){
 		case R.id.a11_startBtn:
 			int mode, duration;
 			mode = 0;
 			duration = 0;
+			//Выбираем алгоритм, определяющий порядок показа вопросов
 			switch(modeRGrp.getCheckedRadioButtonId()){
 			case R.id.a11_modeSimpleRBtn:
-				mode = 0;
+				mode = 0; //случайный выбор из постоянного списка
 				break;
 			case R.id.a11_modeProgressiveRBtn:
-				mode = 1;
+				mode = 1; //с исключением правильно отвеченных вопросов
 				break;
 			default: break;
 			}
-			
+			//Устанавливаем продолжительность теста
 			switch(durationRGrp.getCheckedRadioButtonId()){
 			case R.id.a11_durationEndlessRBtn:
-				duration = 0;
+				duration = 0; //бесконечный показ вопросов
 				break;
 			case R.id.a11_iterationRBtn:
 				String value = iterationET.getText().toString().trim();
+				//Проверяем корректность введённого значения
 				if(value.isEmpty() || Integer.parseInt(value) < 1){
-					Toast toast = Toast.makeText(this, "Число проходов\nне может быть меньше 1", Toast.LENGTH_SHORT);
+					Toast toast = Toast.makeText(this, R.string.a11_wrongIterationCount, Toast.LENGTH_SHORT);
 					TextView tv = (TextView) toast.getView().findViewById(android.R.id.message);
 					if(tv != null) tv.setGravity(Gravity.CENTER);
 					toast.show();
@@ -74,20 +74,23 @@ public class ModeActivity extends Activity implements OnClickListener, OnChecked
 				break;
 			default: break;
 			}
+			//Добавляем в БД информацию о выбранном режиме показа вопросов
 			ContentValues cv = new ContentValues();
 			cv.put("mode", mode);
 			cv.put("duration", duration);
 			getContentResolver().update(DataBaseContentProvider.TESTS_URI, cv, "_id=?", new String[]{testId});
 			
-			Intent iTestActivity = new Intent(this, TestActivity.class);
-			iTestActivity.putExtra("testId", Long.parseLong(testId));
-			startActivityForResult(iTestActivity,1);
+			//Запускаем тест
+			Intent iToTestActivity = new Intent(this, TestActivity.class);
+			iToTestActivity.putExtra("testId", Long.parseLong(testId));
+			startActivityForResult(iToTestActivity,1);
 			break;
 		default: break;
 		}
 	}
 	
 	private void setListenerForBtns(RadioGroup group){
+		//Добавляем обработчик к группе радио-кнопок
 		int btnsCount = group.getChildCount();
 		for(int i=0; i<btnsCount; i++){
 			View view = group.getChildAt(i);
@@ -99,7 +102,7 @@ public class ModeActivity extends Activity implements OnClickListener, OnChecked
 
 	@Override
 	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-		// TODO Auto-generated method stub
+		//Затемняем невыбранные пункты
 		int id = buttonView.getId();
 		if(isChecked){
 			buttonView.setAlpha(1f);

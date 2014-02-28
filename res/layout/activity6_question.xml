@@ -14,11 +14,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
-        android:text="@string/dynamicText"
+        android:text="@string/a6_titleTV"
         android:textStyle="italic" />
 
     <TextView
-        android:id="@+id/a6_questionTV"
+        android:id="@+id/a5_questionTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/a6_questionTV" />

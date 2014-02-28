@@ -14,18 +14,18 @@
         android:id="@+id/a1_newTestBtn"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/newTestBtn" />
+        android:text="@string/a1_newTestBtn" />
 
     <Button
         android:id="@+id/a1_continueTestBtn"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/continueTestBtn" />
+        android:text="@string/a1_continueTestBtn" />
 
     <Button
         android:id="@+id/a1_questionsBtn"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/questionsBtn" />
+        android:text="@string/a1_questionsBtn" />
 
 </LinearLayout>

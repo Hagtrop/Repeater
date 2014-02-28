@@ -5,7 +5,7 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -19,7 +19,6 @@ public class TextEditorActivity extends Activity implements OnClickListener{
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity7_text_editor);
 		
@@ -32,17 +31,19 @@ public class TextEditorActivity extends Activity implements OnClickListener{
 
 	@Override
 	public void onClick(View v) {
-		// TODO Auto-generated method stub
 		String newText = editText.getText().toString().trim();
 		if(TextUtils.isEmpty(newText)){
-			Toast.makeText(this, "Введите текст", Toast.LENGTH_SHORT).show();
+			//Если поле не заполнено выводим сообщение
+			Toast toast = Toast.makeText(this, R.string.a7_enterTextMsg, Toast.LENGTH_SHORT);
+			toast.setGravity(Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL, 0, 0);
+			toast.show();
 		}
 		else{
+			//Обновляем запись в БД
 			ContentValues cv = new ContentValues();
 			cv.put(intent.getExtras().getString("field"), newText);
 			String where = "_id=" + intent.getExtras().getLong("id");
-			int count = getContentResolver().update(DataBaseContentProvider.QUESTIONS_URI, cv, where, null);
-			Log.d("mLog", "TextEditor, обновлено записей: " + count);
+			getContentResolver().update(DataBaseContentProvider.QUESTIONS_URI, cv, where, null);
 			finish();
 		}
 	}

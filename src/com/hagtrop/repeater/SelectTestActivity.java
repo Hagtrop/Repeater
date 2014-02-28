@@ -31,15 +31,16 @@ public class SelectTestActivity extends Activity implements OnItemClickListener,
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity9_select_test);
 		
 		noTestsTV = (TextView) findViewById(R.id.a9_noTestsTV);
 		testsLV = (ListView) findViewById(R.id.a9_testsLV);
 		testsLV.setOnItemClickListener(this);
+		//Добавляем контекстное меню к списку тестов
 		registerForContextMenu(testsLV);
 		
+		//Загружаем в ListView список созданных тестов
 		getLoaderManager().initLoader(0, null, this);
 		int layout = android.R.layout.simple_list_item_1;
 		String[] from = {"title"};
@@ -51,14 +52,13 @@ public class SelectTestActivity extends Activity implements OnItemClickListener,
 
 	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-		// TODO Auto-generated method stub
 		return new CursorLoader(this, DataBaseContentProvider.TESTS_URI, new String[]{"_id","title"}, null, null, null);
 	}
 
 	@Override
 	public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-		// TODO Auto-generated method stub
 		adapter.swapCursor(cursor);
+		//Если список тестов пуст, отображаем сообщение в TextView
 		if(adapter.getCount() == 0){
 			noTestsTV.setVisibility(View.VISIBLE);
 		}
@@ -69,14 +69,13 @@ public class SelectTestActivity extends Activity implements OnItemClickListener,
 
 	@Override
 	public void onLoaderReset(Loader<Cursor> loader) {
-		// TODO Auto-generated method stub
 		adapter.swapCursor(null);
 	}
 
 	@Override
 	public void onItemClick(AdapterView<?> arg0, View v, int position, long id) {
-		// TODO Auto-generated method stub
 		selectedTestId = id;
+		//Создаём меню на основе xml, вызываемое по клику на пункте списка
 		PopupMenu popupMenu = new PopupMenu(this, v);
 		popupMenu.getMenuInflater().inflate(R.menu.a9_popup_menu, popupMenu.getMenu());
 		popupMenu.setOnMenuItemClickListener(this);
@@ -85,15 +84,17 @@ public class SelectTestActivity extends Activity implements OnItemClickListener,
 
 	@Override
 	public boolean onMenuItemClick(MenuItem item) {
-		// TODO Auto-generated method stub
+		//Обрабатываем выбор пункта меню
 		switch(item.getItemId()){
 		case R.id.a9_continueTestMenuItem:
+			//Получаем состояние выбранного теста
 			Cursor cursor = getContentResolver().query(DataBaseContentProvider.TESTS_URI, new String[]{"completed"}, "_id=" + selectedTestId, null, null);
 			cursor.moveToFirst();
 			int completed = cursor.getInt(0);
 			cursor.close();
+			//Если тест пройден до конца, выводим сообщение
 			if(completed == 1){
-				Toast.makeText(this, "Тест выполнен", Toast.LENGTH_SHORT).show();
+				Toast.makeText(this, R.string.a9_testCompletedMsg, Toast.LENGTH_SHORT).show();
 				return true;
 			}
 			break;
@@ -101,8 +102,9 @@ public class SelectTestActivity extends Activity implements OnItemClickListener,
 			Test.resetTest(selectedTestId, getContentResolver());
 			break;
 		}
+		//Проверяем, все ли вопросы теста присутствуют в БД и удаляем несуществующие
 		getContentResolver().delete(DataBaseContentProvider.TEST_REFRESH_URI, "_id=?", new String[]{String.valueOf(selectedTestId)});
-		
+		//Продолжаем выбранный тест
 		Intent iTestActivity = new Intent(this, TestActivity.class);
 		iTestActivity.putExtra("testId", selectedTestId);
 		startActivityForResult(iTestActivity,1);
@@ -111,17 +113,17 @@ public class SelectTestActivity extends Activity implements OnItemClickListener,
 	
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
-		// TODO Auto-generated method stub
 		super.onCreateContextMenu(menu, v, menuInfo);
 		getMenuInflater().inflate(R.menu.a9_context_menu, menu);
 	}
 	
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
-		// TODO Auto-generated method stub
+		//Обрабатываем события контекстного меню
 		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
 		switch(item.getItemId()){
 		case R.id.a9_deleteTestMenuItem:
+			//Удаяем выбранный тест
 			getContentResolver().delete(DataBaseContentProvider.TESTS_URI, "_id=?", new String[]{String.valueOf(info.id)});
 			break;
 		default: break;

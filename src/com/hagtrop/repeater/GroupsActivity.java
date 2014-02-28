@@ -7,9 +7,7 @@ import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -29,23 +27,24 @@ import android.view.View.OnClickListener;
 public class GroupsActivity extends Activity implements LoaderCallbacks<Cursor>, OnClickListener, OnItemClickListener{
 	Button createBtn;
 	TextView noGroupsTV;
-	BaseHelper baseHelper;
 	ListView groupsLV;
 	CursorAdapter adapter;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity2_groups);
 		
+		//Получаем доступ к элементам формы
 		noGroupsTV = (TextView) findViewById(R.id.a2_noGroupsFoundTV);
 		createBtn = (Button) findViewById(R.id.a2_createGroupBtn);
 		createBtn.setOnClickListener(this);
-		baseHelper = new BaseHelper(this);
 		groupsLV = (ListView) findViewById(R.id.a2_groupsLV);
+		//Добавляем контекстное меню к списку групп
 		registerForContextMenu(groupsLV);
 		groupsLV.setOnItemClickListener(this);
 		
+		//Асинхронно подгружаем в ListView названия групп вопросов
 		getLoaderManager().initLoader(1, null, this);
 		int layout = android.R.layout.simple_list_item_1;
 		String[] from = {"title"};
@@ -54,26 +53,28 @@ public class GroupsActivity extends Activity implements LoaderCallbacks<Cursor>,
 		adapter = new SimpleCursorAdapter(this, layout, null, from, to, flags);
 		groupsLV.setAdapter(adapter);
 	}
+	
 	@Override
 	public void onClick(View v) {
-		// TODO Auto-generated method stub
 		switch(v.getId()){
 		case R.id.a2_createGroupBtn:
-			Intent intent = new Intent(this, AddGroupsActivity.class);
-			startActivity(intent);
+			//Переходим к созданию новой группы
+			Intent iToGroupCreate = new Intent(this, AddGroupsActivity.class);
+			startActivity(iToGroupCreate);
 			break;
 		default: break;
 		}
 	}
+	
 	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-		// TODO Auto-generated method stub
-		return new CursorLoader(this, Uri.parse("content://com.hagtrop.repeater.DataBase/groups"), new String[]{"_id","title"}, null, null, null);
+		return new CursorLoader(this, DataBaseContentProvider.GROUPS_URI, new String[]{"_id","title"}, null, null, null);
 	}
+	
 	@Override
 	public void onLoadFinished(Loader<Cursor> arg0, Cursor cursor) {
-		// TODO Auto-generated method stub
 		adapter.swapCursor(cursor);
+		//Если в базе нет групп с вопросами, выводим подсказку в TextView
 		if(adapter.getCount() == 0){
 			noGroupsTV.setVisibility(View.VISIBLE);
 		}
@@ -81,17 +82,17 @@ public class GroupsActivity extends Activity implements LoaderCallbacks<Cursor>,
 			noGroupsTV.setVisibility(View.GONE);
 		}
 	}
+	
 	@Override
 	public void onLoaderReset(Loader<Cursor> arg0) {
-		// TODO Auto-generated method stub
 		adapter.swapCursor(null);
 	}
 	
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
-		// TODO Auto-generated method stub
 		super.onCreateContextMenu(menu, v, menuInfo);
 		if(v.getId() == R.id.a2_groupsLV){
+			//Создаём контекстное меню на основе XML-файла
 			MenuInflater inflater = getMenuInflater();
 			inflater.inflate(R.menu.group_context_menu, menu);
 		}
@@ -99,11 +100,10 @@ public class GroupsActivity extends Activity implements LoaderCallbacks<Cursor>,
 	
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
-		// TODO Auto-generated method stub
 		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
 		switch(item.getItemId()){
 		case R.id.delete_group:
-			Log.d("mLog", "Удалить id="+info.id);
+			//Удаляем группу и все связанные с ней вопросы
 			ContentResolver contentResolver = getContentResolver();
 			contentResolver.delete(DataBaseContentProvider.GROUPS_URI, "_id="+info.id, null);
 			contentResolver.delete(DataBaseContentProvider.QUESTIONS_URI, "group_id="+info.id, null);
@@ -111,12 +111,14 @@ public class GroupsActivity extends Activity implements LoaderCallbacks<Cursor>,
 		}
 		return super.onContextItemSelected(item);
 	}
+	
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-		// TODO Auto-generated method stub
-		Log.d("mLog", "itemClick: position = " + position + ", id = " + id);
-		Intent intent = new Intent(this, GroupQuestionsActivity.class);
-		intent.putExtra("id", id);
-		startActivity(intent);
+		//Переходим к списку вопросов группы
+		Intent iToQuestionsList = new Intent(this, GroupQuestionsActivity.class);
+		iToQuestionsList.putExtra("id", id);
+		startActivity(iToQuestionsList);
 	}
+	
+	
 }

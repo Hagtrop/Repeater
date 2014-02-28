@@ -2,9 +2,9 @@ package com.hagtrop.repeater;
 
 import android.app.Activity;
 import android.content.ContentValues;
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -15,11 +15,8 @@ public class AddGroupsActivity extends Activity implements OnClickListener{
 	EditText nameET;
 	Button saveBtn;
 	
-	final Uri GROUPS_URI = Uri.parse("content://com.hagtrop.repeater.DataBase/groups");
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity3_add_groups);
 		
@@ -27,19 +24,29 @@ public class AddGroupsActivity extends Activity implements OnClickListener{
 		saveBtn = (Button) findViewById(R.id.a3_saveBtn);
 		saveBtn.setOnClickListener(this);
 	}
+	
 	@Override
 	public void onClick(View view) {
-		// TODO Auto-generated method stub
 		ContentValues cv = new ContentValues();
 		String newName = nameET.getText().toString().trim();
+		Toast toast;
+		//Проверяем, что пользователь не оставил поле имени пустым
 		if(!TextUtils.isEmpty(newName)){
+			//Добавляем имя новой группы в БД и выводим соответствующее сообщение
 			cv.put("title", newName);
 			getContentResolver().insert(DataBaseContentProvider.GROUPS_URI, cv);
-			Toast.makeText(this, "Группа создана", Toast.LENGTH_SHORT).show();
+			toast = Toast.makeText(this, R.string.a3_groupCreatedMsg, Toast.LENGTH_SHORT);
+			toast.setGravity(Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL, 0, 0);
+			toast.show();
+			//Возвращаемся к списку групп
+			finish();
+			
 		}
 		else{
-			Toast.makeText(this, "Имя группы не задано", Toast.LENGTH_SHORT).show();
+			//Если имя не задано, выводим сообщение
+			toast = Toast.makeText(this, R.string.a3_groupNameMissedMsg, Toast.LENGTH_SHORT);
+			toast.setGravity(Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL, 0, 0);
+			toast.show();
 		}
-		nameET.getText().clear();
 	}
 }

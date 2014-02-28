@@ -3,34 +3,55 @@
     
     <string name="dynamicText">dynamic text</string>
     <string name="app_name">Repeater</string>
-    <string name="newTestBtn">Новый тест</string>
-    <string name="continueTestBtn">Продолжить тест</string>
-    <string name="questionsBtn">Вопросы</string>
-    <string name="createGroupBtn">Создать группу</string>
-    <string name="noGroupsFoundTV">В базе данных нет ни одной группы.\nПрежде чем добавлять вопросы создайте новую группу.</string>
-    <string name="enterGroupNameTV">Введите название группы</string>
-    <string name="saveGroupNameBtn">Сохранить</string>
+    
+    <string name="a1_newTestBtn">Новый тест</string>
+    <string name="a1_continueTestBtn">Продолжить тест</string>
+    <string name="a1_questionsBtn">Вопросы</string>
+    
+    <string name="a2_createGroupBtn">Создать группу</string>
+    <string name="a2_noGroupsFoundTV">В базе данных нет ни одной группы.\nПрежде чем добавлять вопросы создайте новую группу.</string>
+    
+    <string name="a3_enterNameTV">Введите название группы</string>
+    <string name="a3_saveBtn">Сохранить</string>
+    <string name="a3_groupCreatedMsg">Группа создана</string>
+    <string name="a3_groupNameMissedMsg">Имя группы не задано</string>
+    
     <string name="menu_delete">удалить</string>
     <string name="menu_edit">редактировать</string>
-    <string name="noQuestionsFoundTV">Группа пуста</string>
-    <string name="createQuestionBtn">Добавить вопрос</string>
-    <string name="saveQuestionBtn">Сохранить</string>
-    <string name="questionTitleTV">Заголовок</string>
-    <string name="questionTextTV">Вопрос</string>
-    <string name="answerTextTV">Ответ</string>
+    
+    <string name="a4_noQuestionsFoundTV">Группа пуста</string>
+    <string name="a4_createBtn">Добавить вопрос</string>
+    
+    <string name="a5_saveBtn">Сохранить</string>
+    <string name="a5_titleTV">Заголовок</string>
+    <string name="a5_questionTV">Вопрос</string>
+    <string name="a5_answerTV">Ответ</string>
+    <string name="a5_headerMissedMsg">Укажите заголовок</string>
+    <string name="a5_questionMissedMsg">Введите вопрос</string>
+    <string name="a5_answerMissedMsg">Введите ответ</string>
+    <string name="a5_questionSavedMsg">Вопрос сохранён</string>
+    
+    <string name="a6_titleTV">Заголовок вопроса</string>
     <string name="a6_questionTV">Вопрос:</string>
     <string name="a6_answerTV">Ответ:</string>
+    
     <string name="a7_saveBtn">Сохранить</string>
+    <string name="a7_enterTextMsg">Введите текст</string>
+    
     <string name="a8_nextBtn">Далее</string>
-    <string name="a8_countTV_plus">+</string>
+    <string name="a8_titleMissedMsg">Введите название теста</string>
+    <string name="a8_nothingSelectedMsg">Вы не выбрали ни одной группы вопросов</string>
+    
     <string name="a9_notestsTV">Вы не создали ни одного теста</string>
     <string name="a9_continueTestMenuItem">Продолжить</string>
-    <string name="a9_startoverTestMenuItem">Начать сначала</string>
     <string name="a9_restartTestMenuItem">Начать сначала</string>
     <string name="a9_deleteTestMenuItem">удалить</string>
+    <string name="a9_testCompletedMsg">Тест выполнен</string>
+    
     <string name="a10_yesBtn">Помню</string>
     <string name="a10_noBtn">Не помню</string>
     <string name="a10_checkAnswerChBx">Проверить ответ:</string>
+    
     <string name="a11_chooseModeTV">Порядок следования вопросов</string>
     <string name="a11_modeSimpleRBtn">Случайный выбор из постоянного списка</string>
     <string name="a11_modeProgressiveRBtn">С исключением правильно отвеченных вопросов</string>
@@ -39,10 +60,16 @@
     <string name="a11_iterationRBtn">Число проходов</string>
     <string name="a11_startBtn">Старт</string>
     <string name="a11_iterationET">1</string>
+    <string name="a11_wrongIterationCount">Число проходов\nне может быть меньше 1</string>
+    
     <string name="a12_yourAnswerHeaderTV">Ваш ответ:</string>
     <string name="a12_rightAnswerHeaderTV">Правильный ответ:</string>
     <string name="a12_answerCorrectBtn">Различия несущесвенны</string>
     <string name="a12_answerIncorrectBtn">Мой ответ неверен</string>
     <string name="a13_headerTV">Ответ:</string>
+    <string name="d1_backBtn">Вернуться</string>
+    <string name="a1_d1_message">В базе данных нет вопросов для теста.\nДобавить вопросы?</string>
+    <string name="a1_d1_yesBtn">Да</string>
+    <string name="a1_d1_noBtn">Нет</string>
 
 </resources>

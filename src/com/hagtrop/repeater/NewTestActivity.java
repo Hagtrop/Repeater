@@ -10,7 +10,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Adapter;
@@ -29,7 +28,6 @@ public class NewTestActivity extends Activity implements OnClickListener, Loader
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity8_new_test);
 		
@@ -38,6 +36,7 @@ public class NewTestActivity extends Activity implements OnClickListener, Loader
 		saveBtn.setOnClickListener(this);
 		groupsLV = (ListView) findViewById(R.id.a8_groupsLV);
 		
+		//Заполняем ListView списком непустых групп
 		getLoaderManager().initLoader(4, null, this);
 		int layout = android.R.layout.simple_list_item_multiple_choice;
 		String[] from = {"title"};
@@ -50,40 +49,45 @@ public class NewTestActivity extends Activity implements OnClickListener, Loader
 
 	@Override
 	public void onClick(View v) {
-		// TODO Auto-generated method stub
 		switch(v.getId()){
 		case R.id.a8_nextBtn:
 			String testName = testNameET.getText().toString().trim();
 			if(TextUtils.isEmpty(testName)){
-				Toast.makeText(this, "Введите название теста", Toast.LENGTH_SHORT).show();
+				//Выводим сообщение, если не задано название теста
+				Toast.makeText(this, R.string.a8_titleMissedMsg, Toast.LENGTH_SHORT).show();
 				break;
 			}
+			//Получаем список id отмеченных групп
 			long[] checkedGroups = groupsLV.getCheckedItemIds();
 			if(checkedGroups.length == 0){
-				Toast.makeText(this, "Вы не выбрали ни одной группы вопросов", Toast.LENGTH_SHORT).show();
+				//Если ни одной группы не выбрано выводим сообщение
+				Toast.makeText(this, R.string.a8_nothingSelectedMsg, Toast.LENGTH_SHORT).show();
 				break;
 			}
 			ContentValues cv = new ContentValues();
 			cv.put("title", testName);
+			//Добавляем название нового теста в таблицу тестов
+			//DataBaseContentProvider автоматически создаст таблицу состояния для нового теста
 			Uri createdTestUri = getContentResolver().insert(DataBaseContentProvider.TESTS_URI, cv);
+			//Получаем ID нового теста из URI, возвращённого методом insert
 			String createdTestId = createdTestUri.getLastPathSegment();
+			//Получаем название новой таблицы
 			Cursor cursor = getContentResolver().query(DataBaseContentProvider.TESTS_URI, new String[]{"table_title"}, "_id="+createdTestId, null, null);
 			cursor.moveToFirst();
 			String testTableName = cursor.getString(0);
 			cursor.close();
-			Log.d("mLog", "Добавлен тест id=" + createdTestId);
-			Log.d("mLog", "Создана таблица " + testTableName);
 			ContentValues[] groupsId = new ContentValues[checkedGroups.length];
 			for(int i=0; i<groupsId.length; i++){
 				groupsId[i] = new ContentValues();
 				groupsId[i].put("groupId", checkedGroups[i]);
 				groupsId[i].put("tableName", testTableName);
 			}
+			//Отправляем в ContentResolver ID отмеченных групп и имя таблицы теста
 			getContentResolver().bulkInsert(DataBaseContentProvider.ONE_TEST_URI, groupsId);
 			
-			Intent iModeActivity = new Intent(this, ModeActivity.class);
-			iModeActivity.putExtra("testId", String.valueOf(createdTestId));
-			startActivityForResult(iModeActivity,1);
+			Intent iToModeActivity = new Intent(this, ModeActivity.class);
+			iToModeActivity.putExtra("testId", String.valueOf(createdTestId));
+			startActivityForResult(iToModeActivity,1);
 			break;
 		default: break;
 		}
@@ -91,20 +95,16 @@ public class NewTestActivity extends Activity implements OnClickListener, Loader
 
 	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-		// TODO Auto-generated method stub
-		//return new CursorLoader(this, Uri.parse("content://com.hagtrop.repeater.DataBase/groups"), new String[]{"_id","title"}, null, null, null);
 		return new CursorLoader(this, DataBaseContentProvider.NOT_EMPTY_GROUPS_URI, null, null, null, null);
 	}
 
 	@Override
 	public void onLoadFinished(Loader<Cursor> arg0, Cursor cursor) {
-		// TODO Auto-generated method stub
 		adapter.swapCursor(cursor);
 	}
 
 	@Override
 	public void onLoaderReset(Loader<Cursor> arg0) {
-		// TODO Auto-generated method stub
 		adapter.swapCursor(null);
 	}
 	

@@ -15,7 +15,7 @@
         android:layout_gravity="center_horizontal"
         android:text="@string/a9_notestsTV"
         android:textAlignment="center"
-        android:visibility="gone" />
+        android:visibility="visible" />
 
     <ListView
         android:id="@+id/a9_testsLV"

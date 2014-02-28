@@ -16,7 +16,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_weight="0"
         android:gravity="center_horizontal"
-        android:text="@string/noQuestionsFoundTV"
+        android:text="@string/a4_noQuestionsFoundTV"
         android:visibility="gone" />
 
     <ListView
@@ -33,6 +33,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_weight="0"
-        android:text="@string/createQuestionBtn" />
+        android:text="@string/a4_createBtn" />
 
 </LinearLayout>
